@@ -1,9 +1,19 @@
-import React, { useState } from 'react';
-import { Heart, Zap, Brain, Users, Check, X, Mail, Bell, Sparkles, Bot } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Heart, Zap, Brain, Users, Check, X, Mail, Bell, Sparkles, Bot, Gift, Timer, Star } from 'lucide-react';
 
 function App() {
   const [email, setEmail] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [showOfferPopup, setShowOfferPopup] = useState(false);
+
+  // Show popup after 3 seconds
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowOfferPopup(true);
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleNotifyMe = () => {
     if (email) {
@@ -12,8 +22,94 @@ function App() {
     }
   };
 
+  const handleClaimOffer = () => {
+    setShowOfferPopup(false);
+    // You can add logic here to redirect to payment or save the offer
+  };
+
   return (
     <div className="min-h-screen overflow-hidden bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 relative">
+      {/* Offer Popup Modal */}
+      {showOfferPopup && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="relative bg-gradient-to-br from-pink-500/90 via-purple-600/90 to-blue-600/90 backdrop-blur-lg rounded-3xl border border-white/30 p-8 max-w-md w-full shadow-2xl">
+            {/* Close button */}
+            <button
+              onClick={() => setShowOfferPopup(false)}
+              className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+            >
+              <X className="w-6 h-6" />
+            </button>
+
+            {/* Popup content */}
+            <div className="text-center">
+              {/* Gift icon with animation */}
+              <div className="relative mb-6">
+                <div className="bg-yellow-400 rounded-full p-4 inline-block">
+                  <Gift className="w-8 h-8 text-white" />
+                </div>
+                <div className="absolute -top-2 -right-2">
+                  <Star className="w-6 h-6 text-yellow-300" />
+                </div>
+              </div>
+
+              {/* Title */}
+              <h2 className="text-3xl font-bold text-white mb-3">
+                🎉 LIMITED TIME OFFER!
+              </h2>
+              
+              {/* Offer details */}
+              <div className="bg-white/20 backdrop-blur-sm rounded-2xl p-4 mb-6 border border-white/30">
+                <div className="text-4xl font-bold text-yellow-300 mb-2">
+                  1 MONTH FREE
+                </div>
+                <div className="text-lg text-white/90 mb-2">
+                  For First 1000 Customers
+                </div>
+                <div className="flex items-center justify-center space-x-2 text-sm text-white/80">
+                  <Timer className="w-4 h-4" />
+                  <span>Only 247 spots left!</span>
+                </div>
+              </div>
+
+              {/* Benefits */}
+              <div className="text-left mb-6">
+                <div className="text-sm text-white/90 space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 text-green-400" />
+                    <span>Unlimited AI Characters</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 text-green-400" />
+                    <span>Voice & Video Calls</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Check className="w-4 h-4 text-green-400" />
+                    <span>No Ads Experience</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* CTA buttons */}
+              <div className="space-y-3">
+                <button
+                  onClick={handleClaimOffer}
+                  className="w-full py-4 bg-gradient-to-r from-yellow-400 to-orange-500 hover:from-yellow-500 hover:to-orange-600 rounded-full text-white font-bold text-lg shadow-2xl transform hover:scale-105 transition-all duration-300"
+                >
+                  🎁 CLAIM YOUR FREE MONTH
+                </button>
+                <button
+                  onClick={() => setShowOfferPopup(false)}
+                  className="w-full py-2 text-white/70 hover:text-white text-sm transition-colors"
+                >
+                  Maybe later
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-20 left-20 w-64 h-64 bg-pink-400 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse"></div>
